@@ -12,9 +12,9 @@ TEST_MODUS = True             # Auf False setzen für den echten Durchlauf!
 MAX_TEST_DATENSAETZE = 5
 
 WECLAPP_DOMAIN = os.environ.get("WECLAPP_DOMAIN", "https://performanat.weclapp.com")
-WECLAPP_TOKEN = os.environ["WECLAPP_TOKEN"]
+WECLAPP_TOKEN = os.environ.get("WECLAPP_TOKEN", "DEIN_WECLAPP_TOKEN_HIER")
 
-HUBSPOT_TOKEN = os.environ["HUBSPOT_TOKEN"]
+HUBSPOT_TOKEN = os.environ.get("HUBSPOT_TOKEN", "DEIN_HUBSPOT_TOKEN_HIER")
 
 # --- DYNAMISCHER PFAD ZUR CSV DATEI ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
