@@ -1463,27 +1463,28 @@
                         },
                         {
                             "id": 111,
-                            "module": "http:MakeRequest",
-                            "version": 4,
+                            "module": "hubspotcrm:getCRMObject",
+                            "version": 2,
                             "parameters": {
-                                "tlsType": "",
-                                "proxyKeychain": "",
-                                "authenticationType": "noAuth"
+                                "__IMTCONN__": 3866929
                             },
                             "mapper": {
-                                "url": "https://api.hubapi.com/crm/v3/objects/line_items/{{110.id}}?properties=name,quantity,price,amount,discount,hs_product_id,hs_sku,description,hs_cost_of_goods_sold,hs_recurring_billing_period,hs_discount_percentage,tax",
-                                "method": "get",
-                                "headers": [
-                                    {
-                                        "name": "Authorization",
-                                        "value": "Bearer {{3866929.accessToken}}"
-                                    }
-                                ],
-                                "shareCookies": false,
-                                "parseResponse": true,
-                                "allowRedirects": true,
-                                "stopOnHttpError": true,
-                                "requestCompressedContent": true
+                                "objectType": "line_items",
+                                "objectId": "{{110.id}}",
+                                "outputProperties": [
+                                    "name",
+                                    "quantity",
+                                    "price",
+                                    "amount",
+                                    "discount",
+                                    "hs_product_id",
+                                    "hs_sku",
+                                    "description",
+                                    "hs_cost_of_goods_sold",
+                                    "hs_recurring_billing_period",
+                                    "hs_discount_percentage",
+                                    "tax"
+                                ]
                             },
                             "metadata": {
                                 "designer": {
@@ -1492,176 +1493,67 @@
                                 },
                                 "restore": {
                                     "expect": {
-                                        "method": {
+                                        "objectType": {
                                             "mode": "chose",
-                                            "label": "GET"
+                                            "label": "Line Item"
                                         },
-                                        "headers": {
+                                        "objectId": {
+                                            "mode": "edit"
+                                        },
+                                        "outputProperties": {
                                             "mode": "chose",
-                                            "items": [
-                                                null
+                                            "label": [
+                                                "Name",
+                                                "Quantity",
+                                                "Unit Price",
+                                                "Amount",
+                                                "Discount",
+                                                "Product ID",
+                                                "SKU",
+                                                "Description",
+                                                "Cost of Goods Sold",
+                                                "Recurring Billing Period",
+                                                "Discount Percentage",
+                                                "Tax"
                                             ]
-                                        },
-                                        "shareCookies": {
-                                            "mode": "chose"
-                                        },
-                                        "parseResponse": {
-                                            "mode": "chose"
-                                        },
-                                        "allowRedirects": {
-                                            "mode": "chose"
-                                        },
-                                        "stopOnHttpError": {
-                                            "mode": "chose"
-                                        },
-                                        "requestCompressedContent": {
-                                            "mode": "chose"
                                         }
                                     },
                                     "parameters": {
-                                        "tlsType": {
-                                            "label": "Empty"
-                                        },
-                                        "proxyKeychain": {
-                                            "label": "Choose a key"
-                                        },
-                                        "authenticationType": {
-                                            "label": "No authentication"
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "hubspotcrm"
+                                            },
+                                            "label": "HubSpot Make Connection (srudnick@factory42.com)"
                                         }
                                     }
                                 },
                                 "parameters": [
                                     {
-                                        "name": "authenticationType",
-                                        "type": "select",
-                                        "label": "Authentication type",
-                                        "required": true,
-                                        "validate": {
-                                            "enum": [
-                                                "noAuth",
-                                                "apiKey",
-                                                "basicAuth",
-                                                "oAuth"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "tlsType",
-                                        "type": "select",
-                                        "label": "Transport layer security (TLS)",
-                                        "validate": {
-                                            "enum": [
-                                                "mTls",
-                                                "tls"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "proxyKeychain",
-                                        "type": "keychain:proxy",
-                                        "label": "Proxy"
+                                        "name": "__IMTCONN__",
+                                        "type": "account:hubspotcrm",
+                                        "label": "Connection",
+                                        "required": true
                                     }
                                 ],
                                 "expect": [
                                     {
-                                        "name": "url",
-                                        "type": "url",
-                                        "label": "URL",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "method",
+                                        "name": "objectType",
                                         "type": "select",
-                                        "label": "Method",
-                                        "required": true,
-                                        "validate": {
-                                            "enum": [
-                                                "get",
-                                                "head",
-                                                "post",
-                                                "put",
-                                                "patch",
-                                                "delete",
-                                                "options"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "headers",
-                                        "spec": {
-                                            "name": "value",
-                                            "spec": [
-                                                {
-                                                    "name": "name",
-                                                    "type": "text",
-                                                    "label": "Name",
-                                                    "required": true
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "type": "text",
-                                                    "label": "Value"
-                                                }
-                                            ],
-                                            "type": "collection",
-                                            "label": "Header"
-                                        },
-                                        "type": "array",
-                                        "label": "Headers"
-                                    },
-                                    {
-                                        "name": "parseResponse",
-                                        "type": "boolean",
-                                        "label": "Parse response",
+                                        "label": "Object Type",
                                         "required": true
                                     },
                                     {
-                                        "name": "stopOnHttpError",
-                                        "type": "boolean",
-                                        "label": "Return error if HTTP request fails",
+                                        "name": "objectId",
+                                        "type": "text",
+                                        "label": "Object ID",
                                         "required": true
                                     },
                                     {
-                                        "name": "allowRedirects",
-                                        "type": "boolean",
-                                        "label": "Allow redirects",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "shareCookies",
-                                        "type": "boolean",
-                                        "label": "Share cookies with other HTTP modules",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "requestCompressedContent",
-                                        "type": "boolean",
-                                        "label": "Request compressed content",
-                                        "required": true
-                                    }
-                                ],
-                                "interface": [
-                                    {
-                                        "name": "data",
-                                        "type": "any",
-                                        "label": "Data"
-                                    },
-                                    {
-                                        "name": "statusCode",
-                                        "type": "number",
-                                        "label": "Status Code"
-                                    },
-                                    {
-                                        "name": "headers",
-                                        "spec": [
-                                            {
-                                                "name": "content-type",
-                                                "type": "text",
-                                                "label": "Content-Type"
-                                            }
-                                        ],
-                                        "type": "collection",
-                                        "label": "Headers"
+                                        "name": "outputProperties",
+                                        "type": "select",
+                                        "label": "Output Properties",
+                                        "multiple": true
                                     }
                                 ]
                             }
@@ -1674,14 +1566,14 @@
                                 "feederModule": 111
                             },
                             "mapper": {
-                                "articleId": "{{111.data.properties.hs_sku}}",
-                                "articleNumber": "{{111.data.properties.hs_sku}}",
-                                "title": "{{111.data.properties.name}}",
-                                "description": "{{111.data.properties.description}}",
-                                "quantity": "{{111.data.properties.quantity}}",
-                                "unitPrice": "{{111.data.properties.price}}",
-                                "discountPercentage": "{{111.data.properties.hs_discount_percentage}}",
-                                "netAmount": "{{111.data.properties.amount}}",
+                                "articleId": "{{111.properties.hs_sku}}",
+                                "articleNumber": "{{111.properties.hs_sku}}",
+                                "title": "{{111.properties.name}}",
+                                "description": "{{111.properties.description}}",
+                                "quantity": "{{111.properties.quantity}}",
+                                "unitPrice": "{{111.properties.price}}",
+                                "discountPercentage": "{{111.properties.hs_discount_percentage}}",
+                                "netAmount": "{{111.properties.amount}}",
                                 "positionNumber": "{{110.__IMTINDEX__}}"
                             },
                             "metadata": {
@@ -1692,7 +1584,7 @@
                                 "restore": {
                                     "extra": {
                                         "feederModule": {
-                                            "label": "HTTP - Make a request [111]"
+                                            "label": "HubSpot CRM - Get a CRM Object [111]"
                                         }
                                     }
                                 },
