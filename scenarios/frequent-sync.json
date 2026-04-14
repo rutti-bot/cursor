@@ -1671,7 +1671,7 @@
                             "module": "builtin:BasicAggregator",
                             "version": 1,
                             "parameters": {
-                                "feederModule": 110
+                                "feederModule": 111
                             },
                             "mapper": {
                                 "articleId": "{{111.data.properties.hs_sku}}",
@@ -1692,7 +1692,7 @@
                                 "restore": {
                                     "extra": {
                                         "feederModule": {
-                                            "label": "Iterator [110]"
+                                            "label": "HTTP - Make a request [111]"
                                         }
                                     }
                                 },
