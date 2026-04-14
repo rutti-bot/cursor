@@ -122,8 +122,7 @@
                 "objectType": "deals",
                 "toObjectType": [
                     "companies",
-                    "contacts",
-                    "line_items"
+                    "contacts"
                 ]
             },
             "metadata": {
@@ -1423,53 +1422,14 @@
                     "flow": [
                         {
                             "id": 110,
-                            "module": "builtin:BasicFeeder",
-                            "version": 1,
-                            "filter": {
-                                "name": "Deal has line items",
-                                "conditions": [
-                                    [
-                                        {
-                                            "a": "{{41.associations.line_items}}",
-                                            "o": "exist"
-                                        }
-                                    ]
-                                ]
-                            },
-                            "mapper": {
-                                "array": "{{41.associations.line_items}}"
-                            },
-                            "metadata": {
-                                "designer": {
-                                    "x": 900,
-                                    "y": -750
-                                },
-                                "restore": {
-                                    "expect": {
-                                        "array": {
-                                            "mode": "edit"
-                                        }
-                                    }
-                                },
-                                "expect": [
-                                    {
-                                        "name": "array",
-                                        "type": "array",
-                                        "label": "Array",
-                                        "required": true
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "id": 111,
-                            "module": "hubspotcrm:getLineItem",
+                            "module": "hubspotcrm:searchCRMObject",
                             "version": 2,
                             "parameters": {
                                 "__IMTCONN__": 3866929
                             },
                             "mapper": {
-                                "lineItemId": "{{110.id}}",
+                                "objectType": "line_items",
+                                "limit": "50",
                                 "outputProperties": [
                                     "name",
                                     "quantity",
@@ -1484,17 +1444,29 @@
                                     "hs_discount_percentage",
                                     "tax"
                                 ],
+                                "filterGroups": [
+                                    {
+                                        "filters": [
+                                            {
+                                                "propertyName": "associations.deal",
+                                                "operator": "EQ",
+                                                "value": "{{40.id}}"
+                                            }
+                                        ]
+                                    }
+                                ],
                                 "parseCustomFields": true
                             },
                             "metadata": {
                                 "designer": {
-                                    "x": 1150,
+                                    "x": 900,
                                     "y": -750
                                 },
                                 "restore": {
                                     "expect": {
-                                        "lineItemId": {
-                                            "mode": "edit"
+                                        "objectType": {
+                                            "mode": "chose",
+                                            "label": "Line Item"
                                         },
                                         "outputProperties": {
                                             "mode": "chose",
@@ -1537,16 +1509,57 @@
                                 ],
                                 "expect": [
                                     {
-                                        "name": "lineItemId",
+                                        "name": "objectType",
                                         "type": "select",
-                                        "label": "Line Item ID",
+                                        "label": "Object Type",
                                         "required": true
+                                    },
+                                    {
+                                        "name": "limit",
+                                        "type": "uinteger",
+                                        "label": "Limit"
                                     },
                                     {
                                         "name": "outputProperties",
                                         "type": "select",
                                         "label": "Output Properties",
                                         "multiple": true
+                                    },
+                                    {
+                                        "name": "filterGroups",
+                                        "type": "array",
+                                        "label": "Filter Groups",
+                                        "spec": {
+                                            "type": "collection",
+                                            "spec": [
+                                                {
+                                                    "name": "filters",
+                                                    "type": "array",
+                                                    "label": "Filters",
+                                                    "spec": {
+                                                        "type": "collection",
+                                                        "spec": [
+                                                            {
+                                                                "name": "propertyName",
+                                                                "type": "text",
+                                                                "label": "Property Name"
+                                                            },
+                                                            {
+                                                                "name": "operator",
+                                                                "type": "select",
+                                                                "label": "Operator"
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "type": "text",
+                                                                "label": "Value"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            ],
+                                            "name": "value"
+                                        }
                                     },
                                     {
                                         "name": "parseCustomFields",
@@ -1563,17 +1576,17 @@
                             "module": "builtin:BasicAggregator",
                             "version": 1,
                             "parameters": {
-                                "feederModule": 111
+                                "feederModule": 110
                             },
                             "mapper": {
-                                "articleId": "{{111.properties.hs_sku}}",
-                                "articleNumber": "{{111.properties.hs_sku}}",
-                                "title": "{{111.properties.name}}",
-                                "description": "{{111.properties.description}}",
-                                "quantity": "{{111.properties.quantity}}",
-                                "unitPrice": "{{111.properties.price}}",
-                                "discountPercentage": "{{111.properties.hs_discount_percentage}}",
-                                "netAmount": "{{111.properties.amount}}",
+                                "articleId": "{{110.properties.hs_sku}}",
+                                "articleNumber": "{{110.properties.hs_sku}}",
+                                "title": "{{110.properties.name}}",
+                                "description": "{{110.properties.description}}",
+                                "quantity": "{{110.properties.quantity}}",
+                                "unitPrice": "{{110.properties.price}}",
+                                "discountPercentage": "{{110.properties.hs_discount_percentage}}",
+                                "netAmount": "{{110.properties.amount}}",
                                 "positionNumber": "{{110.__IMTINDEX__}}"
                             },
                             "metadata": {
@@ -1584,7 +1597,7 @@
                                 "restore": {
                                     "extra": {
                                         "feederModule": {
-                                            "label": "HubSpot CRM - Get a Line Item [111]"
+                                            "label": "HubSpot CRM - Search CRM Objects [110]"
                                         }
                                     }
                                 },

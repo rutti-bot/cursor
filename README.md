@@ -31,8 +31,7 @@ Webhook (Deal Change)
       │       └─ PUT  /customer  (Company exists)
       │
       └─ Route 3: Deal → Sales Order Sync
-          ├─ Iterator over line_items associations
-          ├─ GET each line item from HubSpot API
+          ├─ Search line items by deal association (1 API call)
           ├─ Aggregator (collect all orderItems)
           ├─ Build salesOrder JSON
           └─ Router
@@ -45,15 +44,14 @@ Webhook (Deal Change)
 
 ### Changes to Existing Modules
 
-1. **Module 41 (List Associations)** — added `line_items` to the `toObjectType` array so that line items associated with the deal are also fetched.
+1. **Module 41 (List Associations)** — unchanged, fetches `companies` and `contacts` associations. Line items are retrieved separately via the Search CRM Objects module (110).
 
 ### New Modules (Route 3)
 
 | Module ID | Type | Purpose |
 |-----------|------|---------|
-| 110 | `builtin:BasicFeeder` (Iterator) | Iterates over `line_items` associations from the deal |
-| 111 | `hubspotcrm:getLineItem` | Fetches each line item via the native HubSpot "Get a Line Item" module using the existing connection, with properties: `name`, `quantity`, `price`, `amount`, `hs_sku`, `description`, `hs_discount_percentage`, etc. |
-| 112 | `builtin:BasicAggregator` | Aggregates the iterated line items into an `orderItems` array for the weclapp sales order |
+| 110 | `hubspotcrm:searchCRMObject` | Searches for line items associated with the deal (filter: `associations.deal = deal ID`). Returns all line items with their properties in one call — no separate iterator + getLineItem needed. The search module itself iterates and outputs one bundle per line item. |
+| 112 | `builtin:BasicAggregator` | Aggregates the line items from module 110 into an `orderItems` array for the weclapp sales order |
 | 113 | `json:CreateJSON` | Builds the weclapp `salesOrder` JSON body with customer data, addresses, deal data, and the aggregated order items |
 | 114 | `builtin:BasicRouter` | Routes between creating a new sales order vs. updating an existing one |
 | 115 | `http:MakeRequest` (POST) | Creates a new sales order in weclapp (`POST /webapp/api/v1/salesOrder`) |
