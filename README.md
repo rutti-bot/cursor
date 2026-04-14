@@ -52,7 +52,7 @@ Webhook (Deal Change)
 | Module ID | Type | Purpose |
 |-----------|------|---------|
 | 110 | `builtin:BasicFeeder` (Iterator) | Iterates over `line_items` associations from the deal |
-| 111 | `hubspotcrm:getCRMObject` | Fetches each line item's properties via the native HubSpot CRM module (`name`, `quantity`, `price`, `amount`, `hs_product_id`, `hs_sku`, `description`, `hs_discount_percentage`, etc.) |
+| 111 | `hubspotcrm:MakeAnApiCall` (GET) | Fetches each line item via "Make an API Call" using the existing HubSpot connection (`/crm/v3/objects/line_items/{id}`) with properties: `name`, `quantity`, `price`, `amount`, `hs_sku`, `description`, `hs_discount_percentage`, etc. |
 | 112 | `builtin:BasicAggregator` | Aggregates the iterated line items into an `orderItems` array for the weclapp sales order |
 | 113 | `json:CreateJSON` | Builds the weclapp `salesOrder` JSON body with customer data, addresses, deal data, and the aggregated order items |
 | 114 | `builtin:BasicRouter` | Routes between creating a new sales order vs. updating an existing one |

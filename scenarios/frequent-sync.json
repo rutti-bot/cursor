@@ -1463,28 +1463,22 @@
                         },
                         {
                             "id": 111,
-                            "module": "hubspotcrm:getCRMObject",
+                            "module": "hubspotcrm:MakeAnApiCall",
                             "version": 2,
                             "parameters": {
                                 "__IMTCONN__": 3866929
                             },
                             "mapper": {
-                                "objectType": "line_items",
-                                "objectId": "{{110.id}}",
-                                "outputProperties": [
-                                    "name",
-                                    "quantity",
-                                    "price",
-                                    "amount",
-                                    "discount",
-                                    "hs_product_id",
-                                    "hs_sku",
-                                    "description",
-                                    "hs_cost_of_goods_sold",
-                                    "hs_recurring_billing_period",
-                                    "hs_discount_percentage",
-                                    "tax"
-                                ]
+                                "url": "/crm/v3/objects/line_items/{{110.id}}",
+                                "method": "GET",
+                                "headers": [],
+                                "qs": [
+                                    {
+                                        "key": "properties",
+                                        "value": "name,quantity,price,amount,discount,hs_product_id,hs_sku,description,hs_cost_of_goods_sold,hs_recurring_billing_period,hs_discount_percentage,tax"
+                                    }
+                                ],
+                                "body": ""
                             },
                             "metadata": {
                                 "designer": {
@@ -1493,28 +1487,17 @@
                                 },
                                 "restore": {
                                     "expect": {
-                                        "objectType": {
+                                        "method": {
                                             "mode": "chose",
-                                            "label": "Line Item"
+                                            "label": "GET"
                                         },
-                                        "objectId": {
-                                            "mode": "edit"
+                                        "headers": {
+                                            "mode": "chose"
                                         },
-                                        "outputProperties": {
+                                        "qs": {
                                             "mode": "chose",
-                                            "label": [
-                                                "Name",
-                                                "Quantity",
-                                                "Unit Price",
-                                                "Amount",
-                                                "Discount",
-                                                "Product ID",
-                                                "SKU",
-                                                "Description",
-                                                "Cost of Goods Sold",
-                                                "Recurring Billing Period",
-                                                "Discount Percentage",
-                                                "Tax"
+                                            "items": [
+                                                null
                                             ]
                                         }
                                     },
@@ -1538,22 +1521,72 @@
                                 ],
                                 "expect": [
                                     {
-                                        "name": "objectType",
-                                        "type": "select",
-                                        "label": "Object Type",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "objectId",
+                                        "name": "url",
                                         "type": "text",
-                                        "label": "Object ID",
+                                        "label": "URL",
                                         "required": true
                                     },
                                     {
-                                        "name": "outputProperties",
+                                        "name": "method",
                                         "type": "select",
-                                        "label": "Output Properties",
-                                        "multiple": true
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "GET",
+                                                "POST",
+                                                "PUT",
+                                                "PATCH",
+                                                "DELETE"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "type": "array",
+                                        "label": "Headers",
+                                        "spec": {
+                                            "type": "collection",
+                                            "spec": [
+                                                {
+                                                    "name": "key",
+                                                    "type": "text",
+                                                    "label": "Key"
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "type": "text",
+                                                    "label": "Value"
+                                                }
+                                            ],
+                                            "name": "value"
+                                        }
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "type": "array",
+                                        "label": "Query String",
+                                        "spec": {
+                                            "type": "collection",
+                                            "spec": [
+                                                {
+                                                    "name": "key",
+                                                    "type": "text",
+                                                    "label": "Key"
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "type": "text",
+                                                    "label": "Value"
+                                                }
+                                            ],
+                                            "name": "value"
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "text",
+                                        "label": "Body"
                                     }
                                 ]
                             }
@@ -1566,14 +1599,14 @@
                                 "feederModule": 111
                             },
                             "mapper": {
-                                "articleId": "{{111.properties.hs_sku}}",
-                                "articleNumber": "{{111.properties.hs_sku}}",
-                                "title": "{{111.properties.name}}",
-                                "description": "{{111.properties.description}}",
-                                "quantity": "{{111.properties.quantity}}",
-                                "unitPrice": "{{111.properties.price}}",
-                                "discountPercentage": "{{111.properties.hs_discount_percentage}}",
-                                "netAmount": "{{111.properties.amount}}",
+                                "articleId": "{{111.body.properties.hs_sku}}",
+                                "articleNumber": "{{111.body.properties.hs_sku}}",
+                                "title": "{{111.body.properties.name}}",
+                                "description": "{{111.body.properties.description}}",
+                                "quantity": "{{111.body.properties.quantity}}",
+                                "unitPrice": "{{111.body.properties.price}}",
+                                "discountPercentage": "{{111.body.properties.hs_discount_percentage}}",
+                                "netAmount": "{{111.body.properties.amount}}",
                                 "positionNumber": "{{110.__IMTINDEX__}}"
                             },
                             "metadata": {
@@ -1584,7 +1617,7 @@
                                 "restore": {
                                     "extra": {
                                         "feederModule": {
-                                            "label": "HubSpot CRM - Get a CRM Object [111]"
+                                            "label": "HubSpot CRM - Make an API Call [111]"
                                         }
                                     }
                                 },
