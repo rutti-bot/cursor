@@ -1463,22 +1463,28 @@
                         },
                         {
                             "id": 111,
-                            "module": "hubspotcrm:MakeAnApiCall",
+                            "module": "hubspotcrm:getLineItem",
                             "version": 2,
                             "parameters": {
                                 "__IMTCONN__": 3866929
                             },
                             "mapper": {
-                                "url": "/crm/v3/objects/line_items/{{110.id}}",
-                                "method": "GET",
-                                "headers": [],
-                                "qs": [
-                                    {
-                                        "key": "properties",
-                                        "value": "name,quantity,price,amount,discount,hs_product_id,hs_sku,description,hs_cost_of_goods_sold,hs_recurring_billing_period,hs_discount_percentage,tax"
-                                    }
+                                "lineItemId": "{{110.id}}",
+                                "outputProperties": [
+                                    "name",
+                                    "quantity",
+                                    "price",
+                                    "amount",
+                                    "discount",
+                                    "hs_product_id",
+                                    "hs_sku",
+                                    "description",
+                                    "hs_cost_of_goods_sold",
+                                    "hs_recurring_billing_period",
+                                    "hs_discount_percentage",
+                                    "tax"
                                 ],
-                                "body": ""
+                                "parseCustomFields": true
                             },
                             "metadata": {
                                 "designer": {
@@ -1487,18 +1493,28 @@
                                 },
                                 "restore": {
                                     "expect": {
-                                        "method": {
-                                            "mode": "chose",
-                                            "label": "GET"
+                                        "lineItemId": {
+                                            "mode": "edit"
                                         },
-                                        "headers": {
-                                            "mode": "chose"
-                                        },
-                                        "qs": {
+                                        "outputProperties": {
                                             "mode": "chose",
-                                            "items": [
-                                                null
+                                            "label": [
+                                                "Name",
+                                                "Quantity",
+                                                "Unit Price",
+                                                "Amount",
+                                                "Discount",
+                                                "Product ID",
+                                                "SKU",
+                                                "Description",
+                                                "Cost of Goods Sold",
+                                                "Recurring Billing Period",
+                                                "Discount Percentage",
+                                                "Tax"
                                             ]
+                                        },
+                                        "parseCustomFields": {
+                                            "mode": "chose"
                                         }
                                     },
                                     "parameters": {
@@ -1521,74 +1537,25 @@
                                 ],
                                 "expect": [
                                     {
-                                        "name": "url",
-                                        "type": "text",
-                                        "label": "URL",
+                                        "name": "lineItemId",
+                                        "type": "select",
+                                        "label": "Line Item ID",
                                         "required": true
                                     },
                                     {
-                                        "name": "method",
+                                        "name": "outputProperties",
                                         "type": "select",
-                                        "label": "Method",
-                                        "required": true,
-                                        "validate": {
-                                            "enum": [
-                                                "GET",
-                                                "POST",
-                                                "PUT",
-                                                "PATCH",
-                                                "DELETE"
-                                            ]
-                                        }
+                                        "label": "Output Properties",
+                                        "multiple": true
                                     },
                                     {
-                                        "name": "headers",
-                                        "type": "array",
-                                        "label": "Headers",
-                                        "spec": {
-                                            "type": "collection",
-                                            "spec": [
-                                                {
-                                                    "name": "key",
-                                                    "type": "text",
-                                                    "label": "Key"
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "type": "text",
-                                                    "label": "Value"
-                                                }
-                                            ],
-                                            "name": "value"
-                                        }
-                                    },
-                                    {
-                                        "name": "qs",
-                                        "type": "array",
-                                        "label": "Query String",
-                                        "spec": {
-                                            "type": "collection",
-                                            "spec": [
-                                                {
-                                                    "name": "key",
-                                                    "type": "text",
-                                                    "label": "Key"
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "type": "text",
-                                                    "label": "Value"
-                                                }
-                                            ],
-                                            "name": "value"
-                                        }
-                                    },
-                                    {
-                                        "name": "body",
-                                        "type": "text",
-                                        "label": "Body"
+                                        "name": "parseCustomFields",
+                                        "type": "boolean",
+                                        "label": "Parse Custom Fields",
+                                        "required": true
                                     }
-                                ]
+                                ],
+                                "advanced": true
                             }
                         },
                         {
@@ -1599,14 +1566,14 @@
                                 "feederModule": 111
                             },
                             "mapper": {
-                                "articleId": "{{111.body.properties.hs_sku}}",
-                                "articleNumber": "{{111.body.properties.hs_sku}}",
-                                "title": "{{111.body.properties.name}}",
-                                "description": "{{111.body.properties.description}}",
-                                "quantity": "{{111.body.properties.quantity}}",
-                                "unitPrice": "{{111.body.properties.price}}",
-                                "discountPercentage": "{{111.body.properties.hs_discount_percentage}}",
-                                "netAmount": "{{111.body.properties.amount}}",
+                                "articleId": "{{111.properties.hs_sku}}",
+                                "articleNumber": "{{111.properties.hs_sku}}",
+                                "title": "{{111.properties.name}}",
+                                "description": "{{111.properties.description}}",
+                                "quantity": "{{111.properties.quantity}}",
+                                "unitPrice": "{{111.properties.price}}",
+                                "discountPercentage": "{{111.properties.hs_discount_percentage}}",
+                                "netAmount": "{{111.properties.amount}}",
                                 "positionNumber": "{{110.__IMTINDEX__}}"
                             },
                             "metadata": {
@@ -1617,7 +1584,7 @@
                                 "restore": {
                                     "extra": {
                                         "feederModule": {
-                                            "label": "HubSpot CRM - Make an API Call [111]"
+                                            "label": "HubSpot CRM - Get a Line Item [111]"
                                         }
                                     }
                                 },
