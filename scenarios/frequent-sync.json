@@ -1,0 +1,2794 @@
+{
+    "name": "Frequent Sync",
+    "flow": [
+        {
+            "id": 11,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 2765007,
+                "maxResults": null
+            },
+            "filter": null,
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -95,
+                    "y": -460
+                },
+                "restore": {
+                    "parameters": {
+                        "hook": {
+                            "data": {
+                                "editable": "true"
+                            },
+                            "label": "Deal Sync HubSpot "
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook:gateway-webhook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 40,
+            "module": "hubspotcrm:getDeal",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 3866929
+            },
+            "mapper": {
+                "dealId": "{{11.objectId}}",
+                "parseCustomFields": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": -87,
+                    "y": -144
+                },
+                "restore": {
+                    "expect": {
+                        "dealId": {
+                            "mode": "edit"
+                        },
+                        "outputProperties": {
+                            "mode": "chose"
+                        },
+                        "parseCustomFields": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "hubspotcrm"
+                            },
+                            "label": "HubSpot Make Connection (srudnick@factory42.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:hubspotcrm",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "dealId",
+                        "type": "select",
+                        "label": "Deal ID",
+                        "required": true
+                    },
+                    {
+                        "name": "outputProperties",
+                        "type": "select",
+                        "label": "Output Properties",
+                        "multiple": true
+                    },
+                    {
+                        "name": "parseCustomFields",
+                        "type": "boolean",
+                        "label": "Parse Custom Fields",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 41,
+            "module": "hubspotcrm:ListCRMObjectAssociation",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 3866929
+            },
+            "mapper": {
+                "limit": "10",
+                "objectId": "{{11.objectId}}",
+                "objectType": "deals",
+                "toObjectType": [
+                    "companies",
+                    "contacts"
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 141,
+                    "y": -336
+                },
+                "restore": {
+                    "expect": {
+                        "objectType": {
+                            "mode": "chose",
+                            "label": "Deal"
+                        },
+                        "toObjectType": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "hubspotcrm"
+                            },
+                            "label": "HubSpot Make Connection (srudnick@factory42.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:hubspotcrm",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "objectType",
+                        "type": "select",
+                        "label": "From Object Type",
+                        "required": true
+                    },
+                    {
+                        "name": "toObjectType",
+                        "type": "select",
+                        "label": "To Object Type",
+                        "multiple": true,
+                        "required": true
+                    },
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Limit"
+                    },
+                    {
+                        "name": "objectId",
+                        "type": "text",
+                        "label": "Object ID"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 42,
+            "module": "hubspotcrm:getCompany",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 3866929
+            },
+            "mapper": {
+                "companyId": "{{41.associations.companies[1].id}}",
+                "outputProperties": [
+                    "about_us",
+                    "absagegrund_calcium",
+                    "absagegrund_catibovin",
+                    "absagegrund_et",
+                    "absagegrund_energie",
+                    "absagegrund_pf_bolus",
+                    "absagegrund_pf_pulver",
+                    "absagegrund_phosphor",
+                    "absagegrund_repro",
+                    "abweichende_umsatzsteuer",
+                    "alte_kundennummer",
+                    "annualrevenue",
+                    "anzahl_kuehe",
+                    "bic",
+                    "bankverbindungen",
+                    "industry_pn",
+                    "hs_all_assigned_business_unit_ids",
+                    "hs_csm_sentiment",
+                    "calcium_aktualisiert_am",
+                    "calcium_bolus",
+                    "engagements_last_meeting_booked_campaign",
+                    "catibovin",
+                    "catibovin_aktualisiert_am",
+                    "catibovin_vorgestellt_am",
+                    "checkliste_frank",
+                    "city",
+                    "closedate",
+                    "domain",
+                    "hs_keywords",
+                    "name",
+                    "hubspot_owner_id",
+                    "country",
+                    "hs_country_code",
+                    "createdate",
+                    "hs_created_by_user_id",
+                    "hs_v2_cumulative_time_in_customer",
+                    "hs_v2_cumulative_time_in_evangelist",
+                    "hs_v2_cumulative_time_in_4664939721",
+                    "hs_v2_cumulative_time_in_lead",
+                    "hs_v2_cumulative_time_in_marketingqualifiedlead",
+                    "hs_v2_cumulative_time_in_other",
+                    "hs_v2_cumulative_time_in_salesqualifiedlead",
+                    "hs_v2_date_entered_customer",
+                    "hs_v2_date_entered_evangelist",
+                    "hs_v2_date_entered_4664939721",
+                    "hs_v2_date_entered_lead",
+                    "hs_v2_date_entered_marketingqualifiedlead",
+                    "hs_v2_date_entered_other",
+                    "hs_v2_date_entered_salesqualifiedlead",
+                    "hs_v2_date_entered_current_stage",
+                    "hs_v2_date_exited_customer",
+                    "hs_v2_date_exited_evangelist",
+                    "hs_v2_date_exited_4664939721",
+                    "hs_v2_date_exited_lead",
+                    "hs_v2_date_exited_marketingqualifiedlead",
+                    "hs_v2_date_exited_other",
+                    "hs_v2_date_exited_salesqualifiedlead",
+                    "engagements_last_meeting_booked",
+                    "days_to_close",
+                    "description",
+                    "email",
+                    "eori_number",
+                    "et_aktualisiert_am",
+                    "elektrolyt_tab",
+                    "email_weitergabe_verhindern",
+                    "hs_employee_range",
+                    "energie_aktualisiert_am",
+                    "energie_bolus",
+                    "facebook_company_page",
+                    "facebookfans",
+                    "firma_zusatz",
+                    "first_contact_createdate",
+                    "first_conversion_event_name",
+                    "first_conversion_date",
+                    "first_deal_created_date",
+                    "hs_analytics_first_touch_converting_campaign",
+                    "frank",
+                    "hs_gps_error",
+                    "gesperrt",
+                    "googleplus_page",
+                    "language",
+                    "hs_is_enriched",
+                    "hubspot_team_id",
+                    "iban",
+                    "id_weclapp",
+                    "hs_ideal_customer_profile",
+                    "hs_industry_group",
+                    "hs_intent_signals_enabled",
+                    "is_public",
+                    "kontenkennzeichen_kunde",
+                    "notes_last_updated",
+                    "hs_last_booked_meeting_date",
+                    "notes_last_contacted",
+                    "hs_last_sales_activity_timestamp",
+                    "hs_last_logged_call_date",
+                    "hs_last_logged_outgoing_email_date",
+                    "hs_lastmodifieddate",
+                    "hs_last_open_task_date",
+                    "hs_analytics_last_touch_converting_campaign",
+                    "hs_most_recent_de_anonymized_visit",
+                    "hs_v2_latest_time_in_customer",
+                    "hs_v2_latest_time_in_evangelist",
+                    "hs_v2_latest_time_in_4664939721",
+                    "hs_v2_latest_time_in_lead",
+                    "hs_v2_latest_time_in_marketingqualifiedlead",
+                    "hs_v2_latest_time_in_other",
+                    "hs_v2_latest_time_in_salesqualifiedlead",
+                    "hs_analytics_latest_source",
+                    "hs_analytics_latest_source_data_1",
+                    "hs_analytics_latest_source_data_2",
+                    "hs_analytics_latest_source_timestamp",
+                    "hs_latitude",
+                    "pn_lead_status",
+                    "leitweg_id",
+                    "lifecyclestage",
+                    "hs_predictivecontactscore_v2",
+                    "linkedinbio",
+                    "linkedin_company_page",
+                    "hs_linkedin_handle",
+                    "hs_logo_url",
+                    "hs_longitude",
+                    "mahnsperre",
+                    "hs_max_recommendation_score",
+                    "engagements_last_meeting_booked_medium",
+                    "hs_merged_object_ids",
+                    "notes_next_activity_date",
+                    "num_associated_contacts",
+                    "num_associated_deals",
+                    "hs_num_blockers",
+                    "hs_num_child_companies",
+                    "hs_num_contacts_with_buying_roles",
+                    "hs_num_decision_makers",
+                    "numberofemployees",
+                    "num_conversion_events",
+                    "hs_num_open_deals",
+                    "hs_analytics_num_page_views",
+                    "hs_analytics_num_visits",
+                    "num_contacted_notes",
+                    "hs_analytics_source",
+                    "hs_analytics_source_data_1",
+                    "hs_analytics_source_data_2",
+                    "hubspot_owner_assigneddate",
+                    "pf_bolus_aktualisiert_am",
+                    "pf_pulver_aktualisiert_am",
+                    "pf_vorgestellt_am",
+                    "pansenfit_bolus",
+                    "pansenfit_pulver",
+                    "hs_parent_company_id",
+                    "parkplatz",
+                    "parkplatz_aktualisiert_am",
+                    "partyid_weclapp",
+                    "personenkonto_kunde",
+                    "phone",
+                    "phosphor_aktualisiert_am",
+                    "phosphor_bolus",
+                    "phosphor_vorgestellt_am",
+                    "hs_plays",
+                    "zip",
+                    "primare_rechnungsemail_adresse",
+                    "prio",
+                    "hs_quick_context",
+                    "rationsgestaltung",
+                    "recent_conversion_event_name",
+                    "recent_conversion_date",
+                    "recent_deal_amount",
+                    "recent_deal_close_date",
+                    "hs_recent_intent_signals",
+                    "rechungsadresse_land",
+                    "rechnungsadresse_plz",
+                    "rechnungsadresse_stadt",
+                    "rechnungsadresse_strasse",
+                    "rechnungsemail",
+                    "rechnungsversand",
+                    "hs_object_id",
+                    "hs_object_source_label",
+                    "hs_object_source_detail_1",
+                    "hs_object_source_detail_2",
+                    "hs_object_source_detail_3",
+                    "repro_bolus_aktualisiert_am",
+                    "repro_bolus_vorgestellt_am",
+                    "repro_bolus",
+                    "hs_revenue_range",
+                    "sensortechnik",
+                    "hs_shared_team_ids",
+                    "hs_shared_user_ids",
+                    "engagements_last_meeting_booked_source",
+                    "state",
+                    "hs_state_code",
+                    "steuernummer",
+                    "address",
+                    "address2",
+                    "hs_is_target_account",
+                    "telefonnr__weitergabe_verhindern",
+                    "terminwunsch",
+                    "thema_versendete_briefe_ca",
+                    "thema_versendete_briefe_et",
+                    "thema_versendete_briefe_energie",
+                    "thema_versendete_briefe_pf",
+                    "thema_versendete_briefe_repro",
+                    "hs_analytics_first_timestamp",
+                    "hs_v2_time_in_current_stage",
+                    "hs_analytics_last_timestamp",
+                    "hs_analytics_first_visit_timestamp",
+                    "hs_analytics_last_visit_timestamp",
+                    "timezone",
+                    "total_money_raised",
+                    "hs_total_deal_value",
+                    "total_revenue",
+                    "hs_intent_page_views_last_30_days",
+                    "hs_intent_visitors_last_30_days",
+                    "twitterbio",
+                    "twitterfollowers",
+                    "twitterhandle",
+                    "type_pn",
+                    "ust_id",
+                    "hs_updated_by_user_id",
+                    "ursprung",
+                    "ursprung_weclapp",
+                    "vvvo_nummer",
+                    "vertriebsregion",
+                    "vertriebsweg",
+                    "web_technologies",
+                    "website",
+                    "erp_number",
+                    "founded_year",
+                    "zahlungsarten",
+                    "zahlungsbedingungen",
+                    "zuletzt_geandert_durch_make",
+                    "zustandiger_mitarbeiter_weclapp"
+                ],
+                "parseCustomFields": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 193,
+                    "y": -75
+                },
+                "restore": {
+                    "expect": {
+                        "companyId": {
+                            "mode": "edit"
+                        },
+                        "outputProperties": {
+                            "mode": "chose"
+                        },
+                        "parseCustomFields": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "hubspotcrm"
+                            },
+                            "label": "HubSpot Make Connection (srudnick@factory42.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:hubspotcrm",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "companyId",
+                        "type": "select",
+                        "label": "Company ID",
+                        "required": true
+                    },
+                    {
+                        "name": "outputProperties",
+                        "type": "select",
+                        "label": "Output Properties",
+                        "multiple": true
+                    },
+                    {
+                        "name": "parseCustomFields",
+                        "type": "boolean",
+                        "label": "Parse Custom Fields",
+                        "required": true
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 43,
+            "module": "hubspotcrm:getContact",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 3866929
+            },
+            "mapper": {
+                "contactId": "{{41.associations.contacts[1].id}}",
+                "outputProperties": [
+                    "title",
+                    "annualrevenue",
+                    "hs_analytics_average_page_views",
+                    "preferred_channels",
+                    "hs_bing_click_id",
+                    "hs_all_assigned_business_unit_ids",
+                    "hs_social_num_broadcast_clicks",
+                    "hs_buying_role",
+                    "engagements_last_meeting_booked_campaign",
+                    "hs_chat_assistant_iql_date",
+                    "hs_chat_assistant_source",
+                    "hs_chat_assistant_summary",
+                    "checkliste_frank",
+                    "city",
+                    "closedate",
+                    "company",
+                    "company_size",
+                    "hs_contact_creation_legal_basis_source_instance_id",
+                    "hubspot_owner_id",
+                    "hs_predictivescoringtier",
+                    "hs_is_unworked",
+                    "country",
+                    "hs_country_region_code",
+                    "createdate",
+                    "hs_created_by_user_id",
+                    "hs_v2_cumulative_time_in_customer",
+                    "hs_v2_cumulative_time_in_evangelist",
+                    "hs_v2_cumulative_time_in_4664939721",
+                    "hs_v2_cumulative_time_in_lead",
+                    "hs_v2_cumulative_time_in_marketingqualifiedlead",
+                    "hs_v2_cumulative_time_in_other",
+                    "hs_v2_cumulative_time_in_salesqualifiedlead",
+                    "hs_currently_enrolled_in_prospecting_agent",
+                    "hs_sequences_is_enrolled",
+                    "hs_customer_agent_lead_status",
+                    "hs_v2_date_entered_customer",
+                    "hs_v2_date_entered_evangelist",
+                    "hs_v2_date_entered_4664939721",
+                    "hs_v2_date_entered_lead",
+                    "hs_v2_date_entered_marketingqualifiedlead",
+                    "hs_v2_date_entered_other",
+                    "hs_v2_date_entered_salesqualifiedlead",
+                    "hs_v2_date_entered_current_stage",
+                    "hs_v2_date_exited_customer",
+                    "hs_v2_date_exited_evangelist",
+                    "hs_v2_date_exited_4664939721",
+                    "hs_v2_date_exited_lead",
+                    "hs_v2_date_exited_marketingqualifiedlead",
+                    "hs_v2_date_exited_other",
+                    "hs_v2_date_exited_salesqualifiedlead",
+                    "hs_sa_first_engagement_date",
+                    "engagements_last_meeting_booked",
+                    "days_to_close",
+                    "degree",
+                    "hs_sa_first_engagement_descr",
+                    "hs_content_membership_registration_domain_sent_to",
+                    "email",
+                    "hs_email_quarantined_reason",
+                    "hs_email_customer_quarantined_reason",
+                    "hs_email_quarantined",
+                    "hs_content_membership_email_confirmed",
+                    "hs_email_domain",
+                    "hs_email_hard_bounce_reason_enum",
+                    "hs_email_live_sourcing_restricted",
+                    "hs_email_type",
+                    "hs_employment_change_detected_date",
+                    "hs_role",
+                    "hs_seniority",
+                    "hs_sub_role",
+                    "hs_enriched_email_bounce_detected",
+                    "hs_contact_enrichment_opt_out",
+                    "hs_contact_enrichment_opt_out_timestamp",
+                    "hs_analytics_revenue",
+                    "hs_facebook_click_id",
+                    "hs_social_facebook_clicks",
+                    "fax",
+                    "field_of_study",
+                    "hs_first_closed_order_id",
+                    "first_conversion_event_name",
+                    "first_conversion_date",
+                    "first_deal_created_date",
+                    "hs_email_first_click_date",
+                    "hs_email_first_open_date",
+                    "hs_email_first_reply_date",
+                    "hs_email_first_send_date",
+                    "firstname",
+                    "hs_first_order_closed_date",
+                    "hs_analytics_first_url",
+                    "hs_analytics_first_referrer",
+                    "hs_analytics_first_touch_converting_campaign",
+                    "followercount",
+                    "frank_",
+                    "hs_gps_error",
+                    "date_of_birth",
+                    "gender",
+                    "hs_google_click_id",
+                    "hs_social_google_plus_clicks",
+                    "graduation_date",
+                    "mobilephone_2",
+                    "hs_is_enriched",
+                    "hauptansprechpartner",
+                    "hubspotscore",
+                    "hubspot_team_id",
+                    "hs_first_engagement_object_id",
+                    "id_weclapp",
+                    "ip_city",
+                    "ip_country",
+                    "ip_country_code",
+                    "ip_state_code",
+                    "ip_state",
+                    "hs_ip_timezone",
+                    "industry",
+                    "hs_inferred_language_codes",
+                    "hs_intent_signals_enabled",
+                    "interesse_an_webinaren",
+                    "hs_email_bad_address",
+                    "hs_job_change_detected_date",
+                    "job_function",
+                    "jobtitle",
+                    "hs_journey_stage",
+                    "kloutscoregeneral",
+                    "kunden_community",
+                    "notes_last_updated",
+                    "hs_feedback_last_ces_survey_follow_up",
+                    "hs_feedback_last_ces_survey_date",
+                    "hs_feedback_last_ces_survey_rating",
+                    "hs_feedback_last_csat_survey_follow_up",
+                    "hs_feedback_last_csat_survey_date",
+                    "hs_feedback_last_csat_survey_rating",
+                    "notes_last_contacted",
+                    "hs_last_sales_activity_timestamp",
+                    "hs_email_last_click_date",
+                    "hs_email_last_email_name",
+                    "hs_email_last_open_date",
+                    "hs_email_last_reply_date",
+                    "hs_email_last_send_date",
+                    "lastmodifieddate",
+                    "hs_feedback_last_nps_follow_up",
+                    "hs_feedback_last_survey_date",
+                    "hs_feedback_last_nps_rating",
+                    "lastname",
+                    "hs_analytics_last_url",
+                    "hs_analytics_last_referrer",
+                    "last_registered_marketing_optin",
+                    "last_registered_webinar_custom_link_source",
+                    "last_registered_webinar_date",
+                    "last_registered_webinar_link",
+                    "last_registered_webinar_local_datetime",
+                    "last_registered_webinar_name",
+                    "hs_latest_sequence_ended_date",
+                    "hs_latest_sequence_enrolled",
+                    "hs_latest_sequence_enrolled_date",
+                    "hs_analytics_last_touch_converting_campaign",
+                    "last_viewed_webinar_date",
+                    "last_viewed_webinar_name",
+                    "hs_latest_disqualified_lead_date",
+                    "hs_feedback_last_nps_rating_number",
+                    "hs_latest_open_lead_date",
+                    "hs_latest_qualified_lead_date",
+                    "hs_v2_latest_time_in_customer",
+                    "hs_v2_latest_time_in_evangelist",
+                    "hs_v2_latest_time_in_4664939721",
+                    "hs_v2_latest_time_in_lead",
+                    "hs_v2_latest_time_in_marketingqualifiedlead",
+                    "hs_v2_latest_time_in_other",
+                    "hs_v2_latest_time_in_salesqualifiedlead",
+                    "hs_latest_source",
+                    "hs_latest_source_timestamp",
+                    "hs_latest_source_data_1",
+                    "hs_latest_source_data_2",
+                    "hs_latitude",
+                    "hs_predictivecontactscorebucket",
+                    "hs_time_to_first_engagement",
+                    "hs_lead_status",
+                    "pn_lead_status",
+                    "hs_legal_basis",
+                    "favorite_content_topics",
+                    "lifecyclestage",
+                    "hs_predictivecontactscore_v2",
+                    "linkedinbio",
+                    "hs_linkedin_click_id",
+                    "hs_social_linkedin_clicks",
+                    "linkedinconnections",
+                    "hs_linkedin_url",
+                    "hs_longitude",
+                    "marital_status",
+                    "hs_marketable_status",
+                    "hs_marketable_reason_id",
+                    "hs_marketable_reason_type",
+                    "hs_marketable_until_renewal",
+                    "hs_emailconfirmationstatus",
+                    "hs_email_bounce",
+                    "hs_email_click",
+                    "hs_email_delivered",
+                    "hs_email_open",
+                    "hs_email_replied",
+                    "engagements_last_meeting_booked_medium",
+                    "hs_content_membership_email",
+                    "hs_membership_has_accessed_private_content",
+                    "hs_membership_last_private_content_access_date",
+                    "hs_content_membership_notes",
+                    "hs_merged_object_ids",
+                    "message",
+                    "military_status",
+                    "mobilephone",
+                    "hs_social_last_engagement",
+                    "notes_next_activity_date",
+                    "num_associated_deals",
+                    "numemployees",
+                    "hs_analytics_num_event_completions",
+                    "num_conversion_events",
+                    "hs_analytics_num_page_views",
+                    "num_notes",
+                    "hs_sequences_enrolled_count",
+                    "hs_analytics_num_visits",
+                    "num_contacted_notes",
+                    "num_unique_conversion_events",
+                    "hs_email_optout_1509952522",
+                    "hs_email_optout_900559163",
+                    "hs_email_optout_900559162",
+                    "hs_email_optout_1234394471",
+                    "hs_analytics_source",
+                    "hs_analytics_source_data_1",
+                    "hs_analytics_source_data_2",
+                    "hubspot_owner_assigneddate",
+                    "partyid_weclapp",
+                    "hs_persona",
+                    "phone",
+                    "zip",
+                    "hs_predictivecontactscore",
+                    "hs_language",
+                    "hs_prospecting_agent_last_enrolled",
+                    "hs_prospecting_agent_total_enrolled_count",
+                    "hs_quarantined_emails",
+                    "hs_recent_closed_order_date",
+                    "recent_conversion_event_name",
+                    "recent_conversion_date",
+                    "recent_deal_amount",
+                    "recent_deal_close_date",
+                    "hs_sales_email_last_clicked",
+                    "hs_sales_email_last_opened",
+                    "hs_sales_email_last_replied",
+                    "rechnungsadresse_land",
+                    "rechnungsadresse_plz",
+                    "rechnungsadresse_stadt",
+                    "rechnungsadresse_strasse",
+                    "hs_object_id",
+                    "hs_object_source_label",
+                    "hs_object_source_detail_1",
+                    "hs_object_source_detail_2",
+                    "hs_object_source_detail_3",
+                    "hs_content_membership_registered_at",
+                    "hs_registered_member",
+                    "hs_registration_method",
+                    "relationship_status",
+                    "hs_returning_to_office_detected_date",
+                    "salutation",
+                    "school",
+                    "hs_email_sends_since_last_engagement",
+                    "seniority",
+                    "hs_shared_team_ids",
+                    "hs_shared_user_ids",
+                    "engagements_last_meeting_booked_source",
+                    "start_date",
+                    "state",
+                    "hs_state_code",
+                    "hs_content_membership_status",
+                    "address",
+                    "terminwunsch",
+                    "hs_tiktok_click_id",
+                    "hs_time_between_contact_creation_and_deal_close",
+                    "hs_time_between_contact_creation_and_deal_creation",
+                    "hs_content_membership_follow_up_enqueued_at",
+                    "hs_analytics_first_timestamp",
+                    "hs_v2_time_in_current_stage",
+                    "hs_analytics_last_timestamp",
+                    "hs_analytics_first_visit_timestamp",
+                    "hs_analytics_last_visit_timestamp",
+                    "hs_content_membership_registration_email_sent_at",
+                    "hs_time_to_move_from_lead_to_customer",
+                    "hs_time_to_move_from_marketingqualifiedlead_to_customer",
+                    "hs_time_to_move_from_opportunity_to_customer",
+                    "hs_time_to_move_from_salesqualifiedlead_to_customer",
+                    "hs_time_to_move_from_subscriber_to_customer",
+                    "hs_timezone",
+                    "titel",
+                    "total_revenue",
+                    "twitterbio",
+                    "hs_social_twitter_clicks",
+                    "twitterprofilephoto",
+                    "twitterhandle",
+                    "hs_sa_first_engagement_object_type",
+                    "hs_email_optout",
+                    "hs_updated_by_user_id",
+                    "ursprung",
+                    "website",
+                    "hs_whatsapp_phone_number",
+                    "work_email",
+                    "zuletzt_geandert_durch_make"
+                ],
+                "parseCustomFields": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 375,
+                    "y": -296
+                },
+                "restore": {
+                    "expect": {
+                        "contactId": {
+                            "mode": "edit"
+                        },
+                        "outputProperties": {
+                            "mode": "chose"
+                        },
+                        "parseCustomFields": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "hubspotcrm"
+                            },
+                            "label": "HubSpot Make Connection (srudnick@factory42.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:hubspotcrm",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "contactId",
+                        "type": "select",
+                        "label": "Contact ID",
+                        "required": true
+                    },
+                    {
+                        "name": "outputProperties",
+                        "type": "select",
+                        "label": "Output Properties",
+                        "multiple": true
+                    },
+                    {
+                        "name": "parseCustomFields",
+                        "type": "boolean",
+                        "label": "Parse Custom Fields",
+                        "required": true
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 65,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 693,
+                    "y": -263
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 74,
+                            "module": "json:CreateJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 358751,
+                                "space": ""
+                            },
+                            "filter": {
+                                "name": "Contact new",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{43.properties.id_weclapp}}",
+                                            "o": "notexist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "partyType": "ORGANIZATION",
+                                "company": "{{42.properties.name}}",
+                                "email": "{{42.properties.email}}",
+                                "phone": "{{42.properties.phone}}",
+                                "website": "{{42.properties.domain}}",
+                                "responsibleUserId": "{{42.properties.zustandiger_mitarbeiter_weclapp}}",
+                                "customerSalesChannel": "{{42.properties.vertriebsweg}}",
+                                "customerCategoryId": "{{42.properties.type_pn}}",
+                                "customerTermOfPaymentId": "{{42.properties.zahlungsbedingungen}}",
+                                "vatRegistrationNumber": "{{42.properties.ust_id}}",
+                                "addresses": [
+                                    {
+                                        "city": "{{42.properties.city}}",
+                                        "countryCode": "{{ifempty(42.properties.hs_country_code; \"DE\")}}",
+                                        "street1": "{{42.properties.address}}",
+                                        "zipcode": "{{42.properties.zip}}",
+                                        "primaryAddress": true
+                                    },
+                                    {
+                                        "city": "{{42.properties.rechnungsadresse_stadt}}",
+                                        "countryCode": "{{ifempty(42.properties.rechungsadresse_land; \"DE\")}}",
+                                        "street1": "{{42.properties.rechnungsadresse_strasse}}",
+                                        "zipcode": "{{42.properties.rechnungsadresse_plz}}",
+                                        "invoiceAddress": true
+                                    }
+                                ],
+                                "bankAccounts": "{{if(42.properties.iban; add(emptyarray; toCollection(\"accountNumber\"; 42.properties.iban; \"bankCode\"; 42.properties.bic; \"primary\"; true)); ignore)}}",
+                                "customAttributes": [
+                                    {
+                                        "attributeDefinitionId": "2440728",
+                                        "numberValue": "",
+                                        "stringValue": "",
+                                        "booleanValue": "{{42.properties.email_weitergabe_verhindern}}",
+                                        "selectedValueId": "",
+                                        "selectedValues": []
+                                    },
+                                    {
+                                        "attributeDefinitionId": "2440755",
+                                        "numberValue": "",
+                                        "stringValue": "",
+                                        "booleanValue": "{{42.properties.telefonnr__weitergabe_verhindern}}",
+                                        "selectedValueId": "",
+                                        "selectedValues": []
+                                    }
+                                ],
+                                "optIn": false,
+                                "optInPhone": false,
+                                "optInSms": false,
+                                "optInLetter": false,
+                                "insolvent": false,
+                                "useCustomsTariffNumber": false,
+                                "deliveryBlock": false,
+                                "blocked": false,
+                                "insured": false,
+                                "responsibleUserFixed": false,
+                                "invoiceBlock": false,
+                                "optInEmail": false,
+                                "contacts": [
+                                    {
+                                        "id": "{{43.properties.id_weclapp}}",
+                                        "partyType": "PERSON",
+                                        "firstName": "{{43.properties.firstname}}",
+                                        "lastName": "{{43.properties.lastname}}",
+                                        "salutation": "{{if(43.properties.salutation = \"Herr\"; \"MR\"; if(43.properties.salutation = \"Frau\"; \"MRS\"; if(43.properties.salutation = \"Familie\"; \"FAMILY\"; \"NO_SALUTATION\")))}}",
+                                        "birthDate": "{{43.properties.date_of_birth}}",
+                                        "email": "{{43.properties.email}}",
+                                        "phone": "{{43.properties.phone}}",
+                                        "mobilePhone1": "{{43.properties.mobilephone}}",
+                                        "mobilePhone2": "{{43.properties.mobilephone_2}}",
+                                        "optIn": false,
+                                        "optInLetter": false,
+                                        "optInPhone": false,
+                                        "optInSms": false,
+                                        "blocked": false,
+                                        "insured": false,
+                                        "insolvent": false,
+                                        "invoiceBlock": false,
+                                        "deliveryBlock": false,
+                                        "responsibleUserFixed": false,
+                                        "useCustomsTariffNumber": false,
+                                        "addresses": [
+                                            {
+                                                "street1": "{{43.properties.address}}",
+                                                "zipcode": "{{43.properties.zip}}",
+                                                "city": "{{43.properties.city}}",
+                                                "countryCode": "{{ifempty(43.properties.hs_country_region_code; \"DE\")}}"
+                                            }
+                                        ],
+                                        "hs_contact_id": "{{43.id}}",
+                                        "last_changed_by_make": true
+                                    }
+                                ],
+                                "hs_company_id": "{{42.id}}",
+                                "last_changed_by_make": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 811,
+                                    "y": 74
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "type": {
+                                            "label": "Company"
+                                        },
+                                        "space": {
+                                            "label": "Empty"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 94,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 896,
+                                    "y": 339
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 54,
+                                            "module": "http:MakeRequest",
+                                            "version": 4,
+                                            "parameters": {
+                                                "tlsType": "",
+                                                "proxyKeychain": "",
+                                                "apiKeyKeychain": 111569,
+                                                "authenticationType": "apiKey"
+                                            },
+                                            "filter": {
+                                                "name": "Company new",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{42.properties.id_weclapp}}",
+                                                            "o": "notexist"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "url": "https://performanat.weclapp.com/webapp/api/v1/customer",
+                                                "method": "post",
+                                                "headers": [
+                                                    {
+                                                        "name": "AuthenticationToken",
+                                                        "value": "fb1236ed-1d5f-405c-a7b2-9c5b3af3a191"
+                                                    }
+                                                ],
+                                                "contentType": "json",
+                                                "inputMethod": "jsonString",
+                                                "shareCookies": false,
+                                                "parseResponse": true,
+                                                "allowRedirects": true,
+                                                "stopOnHttpError": true,
+                                                "jsonStringBodyContent": "{{74.json}}",
+                                                "requestCompressedContent": true
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1205,
+                                                    "y": 311
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 100,
+                                            "module": "http:MakeRequest",
+                                            "version": 4,
+                                            "parameters": {
+                                                "tlsType": "",
+                                                "proxyKeychain": "",
+                                                "apiKeyKeychain": 111569,
+                                                "authenticationType": "apiKey"
+                                            },
+                                            "filter": {
+                                                "name": "Company exists",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{42.properties.id_weclapp}}",
+                                                            "o": "exist"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "url": "https://performanat.weclapp.com/webapp/api/v1/customer/id/{{42.properties.id_weclapp}}",
+                                                "method": "put",
+                                                "headers": [
+                                                    {
+                                                        "name": "AuthenticationToken",
+                                                        "value": "fb1236ed-1d5f-405c-a7b2-9c5b3af3a191"
+                                                    }
+                                                ],
+                                                "contentType": "json",
+                                                "inputMethod": "jsonString",
+                                                "shareCookies": false,
+                                                "parseResponse": true,
+                                                "allowRedirects": true,
+                                                "stopOnHttpError": true,
+                                                "jsonStringBodyContent": "{{74.json}}",
+                                                "requestCompressedContent": true
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 945,
+                                                    "y": 610
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 103,
+                            "module": "json:CreateJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 358751,
+                                "space": ""
+                            },
+                            "filter": {
+                                "name": "Contact exists",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{43.properties.id_weclapp}}",
+                                            "o": "exist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "partyType": "ORGANIZATION",
+                                "company": "{{42.properties.name}}",
+                                "email": "{{42.properties.email}}",
+                                "phone": "{{42.properties.phone}}",
+                                "website": "{{42.properties.domain}}",
+                                "responsibleUserId": "{{42.properties.zustandiger_mitarbeiter_weclapp}}",
+                                "customerSalesChannel": "{{42.properties.vertriebsweg}}",
+                                "customerCategoryId": "{{42.properties.type_pn}}",
+                                "customerTermOfPaymentId": "{{42.properties.zahlungsbedingungen}}",
+                                "vatRegistrationNumber": "{{42.properties.ust_id}}",
+                                "addresses": [
+                                    {
+                                        "city": "{{42.properties.city}}",
+                                        "countryCode": "{{ifempty(42.properties.hs_country_code; \"DE\")}}",
+                                        "street1": "{{42.properties.address}}",
+                                        "zipcode": "{{42.properties.zip}}",
+                                        "primaryAddress": true
+                                    },
+                                    {
+                                        "city": "{{42.properties.rechnungsadresse_stadt}}",
+                                        "countryCode": "{{ifempty(42.properties.rechungsadresse_land; \"DE\")}}",
+                                        "street1": "{{42.properties.rechnungsadresse_strasse}}",
+                                        "zipcode": "{{42.properties.rechnungsadresse_plz}}",
+                                        "invoiceAddress": true
+                                    }
+                                ],
+                                "bankAccounts": "{{if(42.properties.iban; add(emptyarray; toCollection(\"accountNumber\"; 42.properties.iban; \"bankCode\"; 42.properties.bic; \"primary\"; true)); ignore)}}",
+                                "customAttributes": [
+                                    {
+                                        "attributeDefinitionId": "2440728",
+                                        "numberValue": "",
+                                        "stringValue": "",
+                                        "booleanValue": "{{42.properties.email_weitergabe_verhindern}}",
+                                        "selectedValueId": "",
+                                        "selectedValues": []
+                                    },
+                                    {
+                                        "attributeDefinitionId": "2440755",
+                                        "numberValue": "",
+                                        "stringValue": "",
+                                        "booleanValue": "{{42.properties.telefonnr__weitergabe_verhindern}}",
+                                        "selectedValueId": "",
+                                        "selectedValues": []
+                                    }
+                                ],
+                                "optIn": false,
+                                "optInPhone": false,
+                                "optInSms": false,
+                                "optInLetter": false,
+                                "insolvent": false,
+                                "useCustomsTariffNumber": false,
+                                "deliveryBlock": false,
+                                "blocked": false,
+                                "insured": false,
+                                "responsibleUserFixed": false,
+                                "invoiceBlock": false,
+                                "optInEmail": false,
+                                "contacts": [
+                                    {
+                                        "id": "{{43.properties.id_weclapp}}",
+                                        "partyType": "PERSON",
+                                        "firstName": "{{43.properties.firstname}}",
+                                        "lastName": "{{43.properties.lastname}}",
+                                        "salutation": "{{if(43.properties.salutation = \"Herr\"; \"MR\"; if(43.properties.salutation = \"Frau\"; \"MRS\"; if(43.properties.salutation = \"Familie\"; \"FAMILY\"; \"NO_SALUTATION\")))}}",
+                                        "birthDate": "{{43.properties.date_of_birth}}",
+                                        "email": "{{43.properties.email}}",
+                                        "phone": "{{43.properties.phone}}",
+                                        "mobilePhone1": "{{43.properties.mobilephone}}",
+                                        "mobilePhone2": "{{43.properties.mobilephone_2}}",
+                                        "optIn": false,
+                                        "optInLetter": false,
+                                        "optInPhone": false,
+                                        "optInSms": false,
+                                        "blocked": false,
+                                        "insured": false,
+                                        "insolvent": false,
+                                        "invoiceBlock": false,
+                                        "deliveryBlock": false,
+                                        "responsibleUserFixed": false,
+                                        "useCustomsTariffNumber": false,
+                                        "addresses": [
+                                            {
+                                                "street1": "{{43.properties.address}}",
+                                                "zipcode": "{{43.properties.zip}}",
+                                                "city": "{{43.properties.city}}",
+                                                "countryCode": "{{ifempty(43.properties.hs_country_region_code; \"DE\")}}"
+                                            }
+                                        ],
+                                        "hs_contact_id": "{{43.id}}",
+                                        "last_changed_by_make": true
+                                    }
+                                ],
+                                "hs_company_id": "{{42.id}}",
+                                "last_changed_by_make": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1016,
+                                    "y": -360
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "type": {
+                                            "label": "Company"
+                                        },
+                                        "space": {
+                                            "label": "Empty"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 97,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "filter": {
+                                "name": "Contact exists",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{43.properties.id_weclapp}}",
+                                            "o": "exist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1381,
+                                    "y": -364
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 101,
+                                            "module": "http:MakeRequest",
+                                            "version": 4,
+                                            "parameters": {
+                                                "tlsType": "",
+                                                "proxyKeychain": "",
+                                                "apiKeyKeychain": 111569,
+                                                "authenticationType": "apiKey"
+                                            },
+                                            "filter": {
+                                                "name": "Company new",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{42.properties.id_weclapp}}",
+                                                            "o": "notexist"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "url": "https://performanat.weclapp.com/webapp/api/v1/customer",
+                                                "method": "post",
+                                                "headers": [
+                                                    {
+                                                        "name": "AuthenticationToken",
+                                                        "value": "fb1236ed-1d5f-405c-a7b2-9c5b3af3a191"
+                                                    }
+                                                ],
+                                                "contentType": "json",
+                                                "inputMethod": "jsonString",
+                                                "shareCookies": false,
+                                                "parseResponse": true,
+                                                "allowRedirects": true,
+                                                "stopOnHttpError": true,
+                                                "jsonStringBodyContent": "{{103.json}}",
+                                                "requestCompressedContent": true
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1692,
+                                                    "y": -463
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 102,
+                                            "module": "http:MakeRequest",
+                                            "version": 4,
+                                            "parameters": {
+                                                "tlsType": "",
+                                                "proxyKeychain": "",
+                                                "apiKeyKeychain": 111569,
+                                                "authenticationType": "apiKey"
+                                            },
+                                            "filter": {
+                                                "name": "Company exists",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{42.properties.id_weclapp}}",
+                                                            "o": "exist"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "url": "https://performanat.weclapp.com/webapp/api/v1/customer/id/{{42.properties.id_weclapp}}",
+                                                "method": "put",
+                                                "headers": [
+                                                    {
+                                                        "name": "AuthenticationToken",
+                                                        "value": "fb1236ed-1d5f-405c-a7b2-9c5b3af3a191"
+                                                    }
+                                                ],
+                                                "contentType": "json",
+                                                "inputMethod": "jsonString",
+                                                "shareCookies": false,
+                                                "parseResponse": true,
+                                                "allowRedirects": true,
+                                                "stopOnHttpError": true,
+                                                "jsonStringBodyContent": "{{103.json}}",
+                                                "requestCompressedContent": true
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1607,
+                                                    "y": -181
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 108,
+                            "module": "hubspotcrm:MakeAnApiCall",
+                            "version": 2,
+                            "parameters": {
+                                "__IMTCONN__": 3866929
+                            },
+                            "mapper": {
+                                "url": "/crm/v3/objects/deals/{{40.id}}/associations/line_items",
+                                "method": "GET",
+                                "headers": [],
+                                "qs": [
+                                    {
+                                        "key": "limit",
+                                        "value": "500"
+                                    }
+                                ],
+                                "body": ""
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": -750
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "GET"
+                                        },
+                                        "headers": {
+                                            "mode": "chose"
+                                        },
+                                        "qs": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "hubspotcrm"
+                                            },
+                                            "label": "HubSpot Make Connection (srudnick@factory42.com)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:hubspotcrm",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "text",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "GET",
+                                                "POST",
+                                                "PUT",
+                                                "PATCH",
+                                                "DELETE"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "type": "array",
+                                        "label": "Headers",
+                                        "spec": {
+                                            "type": "collection",
+                                            "spec": [
+                                                {
+                                                    "name": "key",
+                                                    "type": "text",
+                                                    "label": "Key"
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "type": "text",
+                                                    "label": "Value"
+                                                }
+                                            ],
+                                            "name": "value"
+                                        }
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "type": "array",
+                                        "label": "Query String",
+                                        "spec": {
+                                            "type": "collection",
+                                            "spec": [
+                                                {
+                                                    "name": "key",
+                                                    "type": "text",
+                                                    "label": "Key"
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "type": "text",
+                                                    "label": "Value"
+                                                }
+                                            ],
+                                            "name": "value"
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "text",
+                                        "label": "Body"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 109,
+                            "module": "builtin:BasicFeeder",
+                            "version": 1,
+                            "mapper": {
+                                "array": "{{108.body.results}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1050,
+                                    "y": -750
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "array": {
+                                            "mode": "edit"
+                                        }
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "array",
+                                        "type": "array",
+                                        "label": "Array",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 110,
+                            "module": "hubspotcrm:getLineItem",
+                            "version": 2,
+                            "parameters": {
+                                "__IMTCONN__": 3866929
+                            },
+                            "mapper": {
+                                "lineItemId": "{{109.toObjectId}}",
+                                "outputProperties": [
+                                    "name",
+                                    "quantity",
+                                    "price",
+                                    "amount",
+                                    "discount",
+                                    "hs_product_id",
+                                    "hs_sku",
+                                    "description",
+                                    "hs_cost_of_goods_sold",
+                                    "hs_recurring_billing_period",
+                                    "hs_discount_percentage",
+                                    "tax"
+                                ],
+                                "parseCustomFields": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1200,
+                                    "y": -750
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "lineItemId": {
+                                            "mode": "edit"
+                                        },
+                                        "outputProperties": {
+                                            "mode": "chose",
+                                            "label": [
+                                                "Name",
+                                                "Quantity",
+                                                "Unit Price",
+                                                "Amount",
+                                                "Discount",
+                                                "Product ID",
+                                                "SKU",
+                                                "Description",
+                                                "Cost of Goods Sold",
+                                                "Recurring Billing Period",
+                                                "Discount Percentage",
+                                                "Tax"
+                                            ]
+                                        },
+                                        "parseCustomFields": {
+                                            "mode": "chose"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "hubspotcrm"
+                                            },
+                                            "label": "HubSpot Make Connection (srudnick@factory42.com)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:hubspotcrm",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "lineItemId",
+                                        "type": "select",
+                                        "label": "Line Item ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "outputProperties",
+                                        "type": "select",
+                                        "label": "Output Properties",
+                                        "multiple": true
+                                    },
+                                    {
+                                        "name": "parseCustomFields",
+                                        "type": "boolean",
+                                        "label": "Parse Custom Fields",
+                                        "required": true
+                                    }
+                                ],
+                                "advanced": true
+                            }
+                        },
+                        {
+                            "id": 112,
+                            "module": "builtin:BasicAggregator",
+                            "version": 1,
+                            "parameters": {
+                                "feederModule": 110
+                            },
+                            "mapper": {
+                                "articleId": "{{110.properties.hs_sku}}",
+                                "articleNumber": "{{110.properties.hs_sku}}",
+                                "title": "{{110.properties.name}}",
+                                "description": "{{110.properties.description}}",
+                                "quantity": "{{110.properties.quantity}}",
+                                "unitPrice": "{{110.properties.price}}",
+                                "discountPercentage": "{{110.properties.hs_discount_percentage}}",
+                                "netAmount": "{{110.properties.amount}}",
+                                "positionNumber": "{{109.__IMTINDEX__}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1400,
+                                    "y": -750
+                                },
+                                "restore": {
+                                    "extra": {
+                                        "feederModule": {
+                                            "label": "HubSpot CRM - Get a Line Item [110]"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "feederModule",
+                                        "type": "feeder",
+                                        "label": "Source Module",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "articleId",
+                                        "type": "text",
+                                        "label": "Article ID"
+                                    },
+                                    {
+                                        "name": "articleNumber",
+                                        "type": "text",
+                                        "label": "Article Number"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "type": "text",
+                                        "label": "Description"
+                                    },
+                                    {
+                                        "name": "quantity",
+                                        "type": "text",
+                                        "label": "Quantity"
+                                    },
+                                    {
+                                        "name": "unitPrice",
+                                        "type": "text",
+                                        "label": "Unit Price"
+                                    },
+                                    {
+                                        "name": "discountPercentage",
+                                        "type": "text",
+                                        "label": "Discount Percentage"
+                                    },
+                                    {
+                                        "name": "netAmount",
+                                        "type": "text",
+                                        "label": "Net Amount"
+                                    },
+                                    {
+                                        "name": "positionNumber",
+                                        "type": "text",
+                                        "label": "Position Number"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 113,
+                            "module": "json:CreateJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 358752,
+                                "space": ""
+                            },
+                            "mapper": {
+                                "customerId": "{{42.properties.id_weclapp}}",
+                                "customerNumber": "{{42.properties.erp_number}}",
+                                "orderNumber": "",
+                                "commission": "{{40.properties.dealname}}",
+                                "description": "{{40.properties.description}}",
+                                "headerDiscount": "{{40.properties.hs_discount_percentage}}",
+                                "responsibleUserId": "{{42.properties.zustandiger_mitarbeiter_weclapp}}",
+                                "salesChannel": "{{42.properties.vertriebsweg}}",
+                                "recordCurrencyId": "{{40.properties.deal_currency_code}}",
+                                "invoiceAddress": {
+                                    "city": "{{ifempty(42.properties.rechnungsadresse_stadt; 42.properties.city)}}",
+                                    "countryCode": "{{ifempty(42.properties.rechungsadresse_land; ifempty(42.properties.hs_country_code; \"DE\"))}}",
+                                    "street1": "{{ifempty(42.properties.rechnungsadresse_strasse; 42.properties.address)}}",
+                                    "zipcode": "{{ifempty(42.properties.rechnungsadresse_plz; 42.properties.zip)}}",
+                                    "company": "{{42.properties.name}}"
+                                },
+                                "deliveryAddress": {
+                                    "city": "{{42.properties.city}}",
+                                    "countryCode": "{{ifempty(42.properties.hs_country_code; \"DE\")}}",
+                                    "street1": "{{42.properties.address}}",
+                                    "zipcode": "{{42.properties.zip}}",
+                                    "company": "{{42.properties.name}}"
+                                },
+                                "orderItems": "{{112.array}}",
+                                "hs_deal_id": "{{40.id}}",
+                                "last_changed_by_make": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1650,
+                                    "y": -750
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "type": {
+                                            "label": "Sales Order"
+                                        },
+                                        "space": {
+                                            "label": "Empty"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "customerId",
+                                        "type": "text",
+                                        "label": "Customer ID"
+                                    },
+                                    {
+                                        "name": "customerNumber",
+                                        "type": "text",
+                                        "label": "Customer Number"
+                                    },
+                                    {
+                                        "name": "orderNumber",
+                                        "type": "text",
+                                        "label": "Order Number"
+                                    },
+                                    {
+                                        "name": "commission",
+                                        "type": "text",
+                                        "label": "Commission (Deal Name)"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "type": "text",
+                                        "label": "Description"
+                                    },
+                                    {
+                                        "name": "headerDiscount",
+                                        "type": "text",
+                                        "label": "Header Discount"
+                                    },
+                                    {
+                                        "name": "responsibleUserId",
+                                        "type": "text",
+                                        "label": "Responsible User ID"
+                                    },
+                                    {
+                                        "name": "salesChannel",
+                                        "type": "text",
+                                        "label": "Sales Channel"
+                                    },
+                                    {
+                                        "name": "recordCurrencyId",
+                                        "type": "text",
+                                        "label": "Record Currency ID"
+                                    },
+                                    {
+                                        "name": "invoiceAddress",
+                                        "type": "collection",
+                                        "label": "Invoice Address",
+                                        "spec": [
+                                            {
+                                                "name": "city",
+                                                "type": "text",
+                                                "label": "City"
+                                            },
+                                            {
+                                                "name": "countryCode",
+                                                "type": "text",
+                                                "label": "Country Code"
+                                            },
+                                            {
+                                                "name": "street1",
+                                                "type": "text",
+                                                "label": "Street"
+                                            },
+                                            {
+                                                "name": "zipcode",
+                                                "type": "text",
+                                                "label": "Zipcode"
+                                            },
+                                            {
+                                                "name": "company",
+                                                "type": "text",
+                                                "label": "Company"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "deliveryAddress",
+                                        "type": "collection",
+                                        "label": "Delivery Address",
+                                        "spec": [
+                                            {
+                                                "name": "city",
+                                                "type": "text",
+                                                "label": "City"
+                                            },
+                                            {
+                                                "name": "countryCode",
+                                                "type": "text",
+                                                "label": "Country Code"
+                                            },
+                                            {
+                                                "name": "street1",
+                                                "type": "text",
+                                                "label": "Street"
+                                            },
+                                            {
+                                                "name": "zipcode",
+                                                "type": "text",
+                                                "label": "Zipcode"
+                                            },
+                                            {
+                                                "name": "company",
+                                                "type": "text",
+                                                "label": "Company"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "orderItems",
+                                        "type": "array",
+                                        "label": "Order Items",
+                                        "spec": {
+                                            "type": "collection",
+                                            "spec": [
+                                                {
+                                                    "name": "articleId",
+                                                    "type": "text",
+                                                    "label": "Article ID"
+                                                },
+                                                {
+                                                    "name": "articleNumber",
+                                                    "type": "text",
+                                                    "label": "Article Number"
+                                                },
+                                                {
+                                                    "name": "title",
+                                                    "type": "text",
+                                                    "label": "Title"
+                                                },
+                                                {
+                                                    "name": "description",
+                                                    "type": "text",
+                                                    "label": "Description"
+                                                },
+                                                {
+                                                    "name": "quantity",
+                                                    "type": "text",
+                                                    "label": "Quantity"
+                                                },
+                                                {
+                                                    "name": "unitPrice",
+                                                    "type": "text",
+                                                    "label": "Unit Price"
+                                                },
+                                                {
+                                                    "name": "discountPercentage",
+                                                    "type": "text",
+                                                    "label": "Discount Percentage"
+                                                },
+                                                {
+                                                    "name": "netAmount",
+                                                    "type": "text",
+                                                    "label": "Net Amount"
+                                                },
+                                                {
+                                                    "name": "positionNumber",
+                                                    "type": "text",
+                                                    "label": "Position Number"
+                                                }
+                                            ],
+                                            "name": "value"
+                                        }
+                                    },
+                                    {
+                                        "name": "hs_deal_id",
+                                        "type": "text",
+                                        "label": "HubSpot Deal ID"
+                                    },
+                                    {
+                                        "name": "last_changed_by_make",
+                                        "type": "boolean",
+                                        "label": "Last Changed By Make"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 114,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1900,
+                                    "y": -750
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 115,
+                                            "module": "http:MakeRequest",
+                                            "version": 4,
+                                            "parameters": {
+                                                "tlsType": "",
+                                                "proxyKeychain": "",
+                                                "apiKeyKeychain": 111569,
+                                                "authenticationType": "apiKey"
+                                            },
+                                            "filter": {
+                                                "name": "Sales Order new",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{40.properties.id_weclapp_order}}",
+                                                            "o": "notexist"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "url": "https://performanat.weclapp.com/webapp/api/v1/salesOrder",
+                                                "method": "post",
+                                                "headers": [
+                                                    {
+                                                        "name": "AuthenticationToken",
+                                                        "value": "fb1236ed-1d5f-405c-a7b2-9c5b3af3a191"
+                                                    }
+                                                ],
+                                                "contentType": "json",
+                                                "inputMethod": "jsonString",
+                                                "shareCookies": false,
+                                                "parseResponse": true,
+                                                "allowRedirects": true,
+                                                "stopOnHttpError": true,
+                                                "jsonStringBodyContent": "{{113.json}}",
+                                                "requestCompressedContent": true
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2150,
+                                                    "y": -900
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "method": {
+                                                            "mode": "chose",
+                                                            "label": "POST"
+                                                        },
+                                                        "headers": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null
+                                                            ]
+                                                        },
+                                                        "contentType": {
+                                                            "label": "application/jsonEnter data in the JSON format, as a string or using a data structure."
+                                                        },
+                                                        "inputMethod": {
+                                                            "label": "JSON stringEnter the JSON body as a raw text string. If values contain JSON reserved characters, you must escape them manually."
+                                                        },
+                                                        "shareCookies": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "parseResponse": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "allowRedirects": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "paginationType": {
+                                                            "label": "Empty"
+                                                        },
+                                                        "queryParameters": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "stopOnHttpError": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "requestCompressedContent": {
+                                                            "mode": "chose"
+                                                        }
+                                                    },
+                                                    "parameters": {
+                                                        "tlsType": {
+                                                            "label": "Empty"
+                                                        },
+                                                        "proxyKeychain": {
+                                                            "label": "Choose a key"
+                                                        },
+                                                        "apiKeyKeychain": {
+                                                            "label": "Weclapp key"
+                                                        },
+                                                        "authenticationType": {
+                                                            "label": "API keyUse when the service requires an API key."
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "authenticationType",
+                                                        "type": "select",
+                                                        "label": "Authentication type",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "noAuth",
+                                                                "apiKey",
+                                                                "basicAuth",
+                                                                "oAuth"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "tlsType",
+                                                        "type": "select",
+                                                        "label": "Transport layer security (TLS)",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "mTls",
+                                                                "tls"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "proxyKeychain",
+                                                        "type": "keychain:proxy",
+                                                        "label": "Proxy"
+                                                    },
+                                                    {
+                                                        "name": "apiKeyKeychain",
+                                                        "type": "keychain:apikeyauth",
+                                                        "label": "Credentials",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "url",
+                                                        "type": "url",
+                                                        "label": "URL",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "method",
+                                                        "type": "select",
+                                                        "label": "Method",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "get",
+                                                                "head",
+                                                                "post",
+                                                                "put",
+                                                                "patch",
+                                                                "delete",
+                                                                "options"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "headers",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "spec": [
+                                                                {
+                                                                    "name": "name",
+                                                                    "type": "text",
+                                                                    "label": "Name",
+                                                                    "required": true,
+                                                                    "validate": {
+                                                                        "pattern": "^[-!#$%&'*+.^_`|~0-9A-Za-z]+$"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "text",
+                                                                    "label": "Value"
+                                                                }
+                                                            ],
+                                                            "type": "collection",
+                                                            "label": "Header"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Headers"
+                                                    },
+                                                    {
+                                                        "name": "contentType",
+                                                        "type": "select",
+                                                        "label": "Body content type",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "json",
+                                                                "multipart",
+                                                                "urlEncoded",
+                                                                "custom"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "parseResponse",
+                                                        "type": "boolean",
+                                                        "label": "Parse response",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "stopOnHttpError",
+                                                        "type": "boolean",
+                                                        "label": "Return error if HTTP request fails",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "timeout",
+                                                        "type": "uinteger",
+                                                        "label": "Timeout",
+                                                        "validate": {
+                                                            "max": 300,
+                                                            "min": 1
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "allowRedirects",
+                                                        "type": "boolean",
+                                                        "label": "Allow redirects",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "shareCookies",
+                                                        "type": "boolean",
+                                                        "label": "Share cookies with other HTTP modules",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "requestCompressedContent",
+                                                        "type": "boolean",
+                                                        "label": "Request compressed content",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "inputMethod",
+                                                        "type": "select",
+                                                        "label": "Body input method",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "dataStructure",
+                                                                "jsonString"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "jsonStringBodyContent",
+                                                        "type": "text",
+                                                        "label": "Body content",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "paginationType",
+                                                        "type": "select",
+                                                        "label": "Pagination type",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "offsetBased",
+                                                                "pageBased",
+                                                                "urlBased",
+                                                                "tokenBased"
+                                                            ]
+                                                        }
+                                                    }
+                                                ],
+                                                "interface": [
+                                                    {
+                                                        "name": "data",
+                                                        "type": "any",
+                                                        "label": "Data"
+                                                    },
+                                                    {
+                                                        "name": "statusCode",
+                                                        "type": "number",
+                                                        "label": "Status Code"
+                                                    },
+                                                    {
+                                                        "name": "headers",
+                                                        "spec": [
+                                                            {
+                                                                "name": "content-length",
+                                                                "type": "text",
+                                                                "label": "Content-Length"
+                                                            },
+                                                            {
+                                                                "name": "content-encoding",
+                                                                "type": "text",
+                                                                "label": "Content-Encoding"
+                                                            },
+                                                            {
+                                                                "name": "content-type",
+                                                                "type": "text",
+                                                                "label": "Content-Type"
+                                                            },
+                                                            {
+                                                                "name": "server",
+                                                                "type": "text",
+                                                                "label": "Server"
+                                                            },
+                                                            {
+                                                                "name": "cache-control",
+                                                                "type": "text",
+                                                                "label": "Cache-Control"
+                                                            },
+                                                            {
+                                                                "name": "set-cookie",
+                                                                "spec": {
+                                                                    "type": "text"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Set-Cookie"
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Headers"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 117,
+                                            "module": "hubspotcrm:updateDeal",
+                                            "version": 2,
+                                            "parameters": {
+                                                "__IMTCONN__": 3866929
+                                            },
+                                            "mapper": {
+                                                "dealId": "{{40.id}}",
+                                                "properties": {
+                                                    "id_weclapp_order": "{{115.data.id}}"
+                                                }
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2400,
+                                                    "y": -900
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "dealId": {
+                                                            "mode": "edit"
+                                                        }
+                                                    },
+                                                    "parameters": {
+                                                        "__IMTCONN__": {
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "hubspotcrm"
+                                                            },
+                                                            "label": "HubSpot Make Connection (srudnick@factory42.com)"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account:hubspotcrm",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "dealId",
+                                                        "type": "select",
+                                                        "label": "Deal ID",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "properties",
+                                                        "type": "collection",
+                                                        "label": "Properties",
+                                                        "spec": [
+                                                            {
+                                                                "name": "id_weclapp_order",
+                                                                "type": "text",
+                                                                "label": "ID Weclapp Order"
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 116,
+                                            "module": "http:MakeRequest",
+                                            "version": 4,
+                                            "parameters": {
+                                                "tlsType": "",
+                                                "proxyKeychain": "",
+                                                "apiKeyKeychain": 111569,
+                                                "authenticationType": "apiKey"
+                                            },
+                                            "filter": {
+                                                "name": "Sales Order exists",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{40.properties.id_weclapp_order}}",
+                                                            "o": "exist"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "url": "https://performanat.weclapp.com/webapp/api/v1/salesOrder/id/{{40.properties.id_weclapp_order}}",
+                                                "method": "put",
+                                                "headers": [
+                                                    {
+                                                        "name": "AuthenticationToken",
+                                                        "value": "fb1236ed-1d5f-405c-a7b2-9c5b3af3a191"
+                                                    }
+                                                ],
+                                                "contentType": "json",
+                                                "inputMethod": "jsonString",
+                                                "shareCookies": false,
+                                                "parseResponse": true,
+                                                "allowRedirects": true,
+                                                "stopOnHttpError": true,
+                                                "jsonStringBodyContent": "{{113.json}}",
+                                                "requestCompressedContent": true
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2150,
+                                                    "y": -600
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "method": {
+                                                            "mode": "chose",
+                                                            "label": "PUT"
+                                                        },
+                                                        "headers": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null
+                                                            ]
+                                                        },
+                                                        "contentType": {
+                                                            "label": "application/jsonEnter data in the JSON format, as a string or using a data structure."
+                                                        },
+                                                        "inputMethod": {
+                                                            "label": "JSON stringEnter the JSON body as a raw text string. If values contain JSON reserved characters, you must escape them manually."
+                                                        },
+                                                        "shareCookies": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "parseResponse": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "allowRedirects": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "paginationType": {
+                                                            "label": "Empty"
+                                                        },
+                                                        "queryParameters": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "stopOnHttpError": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "requestCompressedContent": {
+                                                            "mode": "chose"
+                                                        }
+                                                    },
+                                                    "parameters": {
+                                                        "tlsType": {
+                                                            "label": "Empty"
+                                                        },
+                                                        "proxyKeychain": {
+                                                            "label": "Choose a key"
+                                                        },
+                                                        "apiKeyKeychain": {
+                                                            "label": "Weclapp key"
+                                                        },
+                                                        "authenticationType": {
+                                                            "label": "API keyUse when the service requires an API key."
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "authenticationType",
+                                                        "type": "select",
+                                                        "label": "Authentication type",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "noAuth",
+                                                                "apiKey",
+                                                                "basicAuth",
+                                                                "oAuth"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "tlsType",
+                                                        "type": "select",
+                                                        "label": "Transport layer security (TLS)",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "mTls",
+                                                                "tls"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "proxyKeychain",
+                                                        "type": "keychain:proxy",
+                                                        "label": "Proxy"
+                                                    },
+                                                    {
+                                                        "name": "apiKeyKeychain",
+                                                        "type": "keychain:apikeyauth",
+                                                        "label": "Credentials",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "url",
+                                                        "type": "url",
+                                                        "label": "URL",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "method",
+                                                        "type": "select",
+                                                        "label": "Method",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "get",
+                                                                "head",
+                                                                "post",
+                                                                "put",
+                                                                "patch",
+                                                                "delete",
+                                                                "options"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "headers",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "spec": [
+                                                                {
+                                                                    "name": "name",
+                                                                    "type": "text",
+                                                                    "label": "Name",
+                                                                    "required": true,
+                                                                    "validate": {
+                                                                        "pattern": "^[-!#$%&'*+.^_`|~0-9A-Za-z]+$"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "text",
+                                                                    "label": "Value"
+                                                                }
+                                                            ],
+                                                            "type": "collection",
+                                                            "label": "Header"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Headers"
+                                                    },
+                                                    {
+                                                        "name": "contentType",
+                                                        "type": "select",
+                                                        "label": "Body content type",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "json",
+                                                                "multipart",
+                                                                "urlEncoded",
+                                                                "custom"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "parseResponse",
+                                                        "type": "boolean",
+                                                        "label": "Parse response",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "stopOnHttpError",
+                                                        "type": "boolean",
+                                                        "label": "Return error if HTTP request fails",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "timeout",
+                                                        "type": "uinteger",
+                                                        "label": "Timeout",
+                                                        "validate": {
+                                                            "max": 300,
+                                                            "min": 1
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "allowRedirects",
+                                                        "type": "boolean",
+                                                        "label": "Allow redirects",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "shareCookies",
+                                                        "type": "boolean",
+                                                        "label": "Share cookies with other HTTP modules",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "requestCompressedContent",
+                                                        "type": "boolean",
+                                                        "label": "Request compressed content",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "inputMethod",
+                                                        "type": "select",
+                                                        "label": "Body input method",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "dataStructure",
+                                                                "jsonString"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "jsonStringBodyContent",
+                                                        "type": "text",
+                                                        "label": "Body content",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "paginationType",
+                                                        "type": "select",
+                                                        "label": "Pagination type",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "offsetBased",
+                                                                "pageBased",
+                                                                "urlBased",
+                                                                "tokenBased"
+                                                            ]
+                                                        }
+                                                    }
+                                                ],
+                                                "interface": [
+                                                    {
+                                                        "name": "data",
+                                                        "type": "any",
+                                                        "label": "Data"
+                                                    },
+                                                    {
+                                                        "name": "statusCode",
+                                                        "type": "number",
+                                                        "label": "Status Code"
+                                                    },
+                                                    {
+                                                        "name": "headers",
+                                                        "spec": [
+                                                            {
+                                                                "name": "content-length",
+                                                                "type": "text",
+                                                                "label": "Content-Length"
+                                                            },
+                                                            {
+                                                                "name": "content-encoding",
+                                                                "type": "text",
+                                                                "label": "Content-Encoding"
+                                                            },
+                                                            {
+                                                                "name": "content-type",
+                                                                "type": "text",
+                                                                "label": "Content-Type"
+                                                            },
+                                                            {
+                                                                "name": "server",
+                                                                "type": "text",
+                                                                "label": "Server"
+                                                            },
+                                                            {
+                                                                "name": "cache-control",
+                                                                "type": "text",
+                                                                "label": "Cache-Control"
+                                                            },
+                                                            {
+                                                                "name": "set-cookie",
+                                                                "spec": {
+                                                                    "type": "text"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Set-Cookie"
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Headers"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.make.com",
+        "notes": [
+            {
+                "id": 1,
+                "text": "Route 1: Customer/Contact Sync (Contact new) - Creates or updates weclapp customer when HubSpot contact has no weclapp ID",
+                "position": [811, 200]
+            },
+            {
+                "id": 2,
+                "text": "Route 2: Customer/Contact Sync (Contact exists) - Creates or updates weclapp customer when HubSpot contact already has a weclapp ID",
+                "position": [1016, -500]
+            },
+            {
+                "id": 3,
+                "text": "Route 3: Deal → Sales Order Sync - Fetches line items from the deal, aggregates them, and creates/updates a sales order in weclapp linked to the customer, contact, and deal data",
+                "position": [1400, -950]
+            }
+        ]
+    }
+}
