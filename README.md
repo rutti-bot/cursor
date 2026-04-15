@@ -31,7 +31,9 @@ Webhook (Deal Change)
       │       └─ PUT  /customer  (Company exists)
       │
       └─ Route 3: Deal → Sales Order Sync
-          ├─ Search line items by deal association (1 API call)
+          ├─ Make an API Call: GET deal line item associations
+          ├─ Iterator over association results
+          ├─ Get Line Item (properties per item)
           ├─ Aggregator (collect all orderItems)
           ├─ Build salesOrder JSON
           └─ Router
@@ -50,7 +52,9 @@ Webhook (Deal Change)
 
 | Module ID | Type | Purpose |
 |-----------|------|---------|
-| 110 | `hubspotcrm:searchCRMObject` | Searches for line items associated with the deal (filter: `associations.deal = deal ID`). Returns all line items with their properties in one call — no separate iterator + getLineItem needed. The search module itself iterates and outputs one bundle per line item. |
+| 108 | `hubspotcrm:MakeAnApiCall` (GET) | Fetches deal-to-line-item associations via `/crm/v3/objects/deals/{id}/associations/line_items`. Uses the existing HubSpot connection — no manual token needed. |
+| 109 | `builtin:BasicFeeder` (Iterator) | Iterates over the association results (`108.body.results`), outputting one bundle per line item ID |
+| 110 | `hubspotcrm:getLineItem` | Fetches each line item's properties via the native module (`name`, `quantity`, `price`, `hs_sku`, `description`, `hs_discount_percentage`, etc.) |
 | 112 | `builtin:BasicAggregator` | Aggregates the line items from module 110 into an `orderItems` array for the weclapp sales order |
 | 113 | `json:CreateJSON` | Builds the weclapp `salesOrder` JSON body with customer data, addresses, deal data, and the aggregated order items |
 | 114 | `builtin:BasicRouter` | Routes between creating a new sales order vs. updating an existing one |
